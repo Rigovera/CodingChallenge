@@ -1,0 +1,240 @@
+﻿@page "/nuevoAnimal"
+@inject CodeChallenge.Data.ZoologicoServicio _zoologicoServicio
+
+@inject IJSRuntime JSRuntime
+
+<h3>Nuevo Animal</h3>
+<EditForm EditContext="editContext" OnValidSubmit="AgregarAnimal">
+    <DataAnnotationsValidator />
+    <div class="form-group row justify-content-center">
+        <div class="col-8">
+            <div class="card">
+                <div class="card-body">
+                    <div class="form-group row justify-content-center">
+                        <div class="col-2">
+                            <label class="col-form-label">Tipo</label>
+                        </div>
+                        <div class="col-4">
+                            <select @bind="TipoAnimal" class="form-control">
+                                <option value="">-- Seleccionar Tipo --</option>
+                                @foreach (var tipo in _tipos)
+                                {
+                                    <option value="@tipo">@tipo</option>
+                                }
+                            </select>
+                        </div>
+                        <ValidationMessage For="(() => animal.Tipo)"></ValidationMessage>
+                    </div>
+                    <div class="form-group row justify-content-center">
+                        <div class="col-2">
+                            <label class="col-form-label">Especie</label>
+                        </div>
+                        <div class="col-4">
+                            <input type="text" class="form-control reptil carnivoro herviboro" @bind="animal.Especie" />
+                        </div>
+                        <ValidationMessage For="(() => animal.Especie)"></ValidationMessage>
+                    </div>
+                    <div class="form-group row justify-content-center">
+                        <div class="col-2">
+                            <label class="col-form-label">Edad</label>
+                        </div>
+                        <div class="col-4">
+                            <input type="number" class="form-control reptil carnivoro herviboro" @bind="animal.Edad" />
+                        </div>
+                        <ValidationMessage For="(() => animal.Edad)"></ValidationMessage>
+                    </div>
+                    <div class="form-group row justify-content-center">
+                        <div class="col-2">
+                            <label class="col-form-label">Lugar de Origen</label>
+                        </div>
+                        <div class="col-4">
+                            <input type="text" class="form-control reptil carnivoro herviboro" @bind="animal.LugarOrigen" />
+                        </div>
+                        <ValidationMessage For="(() => animal.LugarOrigen)"></ValidationMessage>
+                    </div>
+                    <div class="form-group row justify-content-center">
+                        <div class="col-2">
+                            <label class="col-form-label">Peso</label>
+                        </div>
+                        <div class="col-4">
+                            <input type="number" class="form-control reptil carnivoro herviboro" @bind="animal.Peso" />
+                        </div>
+                        <ValidationMessage For="(() => animal.Peso)"></ValidationMessage>
+                    </div>
+                    <div class="form-group row justify-content-center">
+                        <div class="col-2">
+                            <label class="col-form-label">Porcentaje Carne</label>
+                        </div>
+                        <div class="col-4">
+                            <input type="number" class="form-control reptil carnivoro" @bind="animal.PorcentajeCarne" />
+                        </div>
+                        <ValidationMessage For="(() => animal.PorcentajeCarne)"></ValidationMessage>
+                    </div>
+                    <div class="form-group row justify-content-center">
+                        <div class="col-2">
+                            <label class="col-form-label">Porcentaje Hierbas</label>
+                        </div>
+                        <div class="col-4">
+                            <input type="number" class="form-control reptil herviboro" @bind="animal.PorcentajeHierbas" />
+                        </div>
+                        <ValidationMessage For="(() => animal.PorcentajeHierbas)"></ValidationMessage>
+                    </div>
+                    <div class="form-group row justify-content-center">
+                        <div class="col-2">
+                            <label class="col-form-label">Kilos Alimento</label>
+                        </div>
+                        <div class="col-4">
+                            <input type="number" class="form-control herviboro" @bind="animal.Kilos" />
+                        </div>
+                        <ValidationMessage For="(() => animal.Kilos)"></ValidationMessage>
+                    </div>
+                    <div class="form-group row justify-content-center">
+                        <div class="col-2">
+                            <label class="col-form-label">Dias Cambio de Piel</label>
+                        </div>
+                        <div class="col-4">
+                            <input type="number" class="form-control reptil" @bind="animal.CambioPiel" />
+                        </div>
+                        <ValidationMessage For="(() => animal.CambioPiel)"></ValidationMessage>
+                    </div>
+                    <div class="form-group row">
+                        <div class="col-12 d-flex justify-content-center">
+                            <button type="button" class="btn btn-success" @onclick="AgregarAnimal">Agregar</button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="col-8">
+            <div class="card">
+                <div class="card-body">
+                    <table class="table table-hover">
+                        <thead>
+                            <tr>
+                                <th>Ingreso</th>
+                                <th>Tipo Animal</th>
+                                <th>Especie</th>
+                                <th>Edad</th>
+                                <th>Origen</th>
+                                <th>Peso</th>
+                                <th>Alimento Mens. Carne</th>
+                                <th>Alimento Mens. Hierbas</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            @foreach (var item in _zoologicoServicio._animales)
+                            {
+                                <tr>
+                                    <td>@item.Ingreso.ToShortDateString()</td>
+                                    <td>@item.Tipo</td>
+                                    <td>@item.Especie</td>
+                                    <td>@item.Edad Años</td>
+                                    <td>@item.LugarOrigen</td>
+                                    <td>@item.Peso Kg</td>
+                                    <td>@item.AlimentoMensualCarne Kg</td>
+                                    <td>@item.AlimentoMensualHierbas Kg</td>
+                                </tr>
+                            }
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+        </div>
+    </div>
+</EditForm>
+
+@code
+    {
+
+    private List<string> _tipos;
+
+    protected CodeChallenge.Data.Model.Animal animal = new Data.Model.Animal();
+    private EditContext editContext;
+
+    private string tipoAnimal;
+    protected string TipoAnimal
+    {
+        get { return tipoAnimal; }
+        set
+        {
+            tipoAnimal = value;
+            animal.Tipo = value;
+            HabilitarSegunTipoAnimal();
+        }
+    }
+
+    private void HabilitarSegunTipoAnimal()
+    {
+        DeshabilitarInputs();
+
+        if (animal.Tipo == CodeChallenge.Data.TipoAnimales.Reptil)
+            HabilitarInputs("reptil");
+        if (animal.Tipo == CodeChallenge.Data.TipoAnimales.Carnivoro)
+            HabilitarInputs("carnivoro");
+        if (animal.Tipo == CodeChallenge.Data.TipoAnimales.Herviboro)
+            HabilitarInputs("herviboro");
+    }
+
+    protected override void OnInitialized()
+    {
+        editContext = new EditContext(animal);
+        HabilitarSegunTipoAnimal();
+    }
+
+    private void AgregarAnimal()
+    {
+        var resultadoValidacion = _zoologicoServicio.ValidarIngresoAnimal(animal);
+        if (!resultadoValidacion.Any())
+        {
+            _zoologicoServicio.AgregarAnimal(animal);
+            var advertencia = _zoologicoServicio.AdvertirExcesoAlimento(animal);
+            if (advertencia != 0)
+                MostrarAdvertenciaAlimento(advertencia);
+            MostrarAgregadoExitosamente();
+            animal = new Data.Model.Animal();
+        }
+        else
+        {
+            editContext = null;
+            TipoAnimal = animal.Tipo;
+            OnInitialized();
+            var mensajesValidacion = new ValidationMessageStore(editContext);
+            foreach (var item in resultadoValidacion)
+            {
+                mensajesValidacion.Add(new FieldIdentifier(animal, item.Key), item.Value);
+                editContext.NotifyValidationStateChanged();
+            }
+            MostrarNoAgregadoExitosamente();
+        }
+    }
+
+    async Task HabilitarInputs(string value)
+    {
+        await JSRuntime.InvokeVoidAsync("HabilitarInputs", value);
+    }
+
+    async Task DeshabilitarInputs()
+    {
+        await JSRuntime.InvokeVoidAsync("DeshabilitarInputs");
+    }
+
+    protected override Task OnInitializedAsync()
+    {
+        _tipos = _zoologicoServicio.TiposAnimales;
+        return base.OnInitializedAsync();
+    }
+
+    async Task MostrarAgregadoExitosamente()
+    {
+        await JSRuntime.InvokeVoidAsync("alert", $"El {animal.Tipo} se agregó exitosamente");
+    }
+
+    async Task MostrarAdvertenciaAlimento(double alimento)
+    {
+        await JSRuntime.InvokeVoidAsync("alert", $"El alimento supera los 1500 kilos. El alimento mensual necesario es: {alimento}");
+    }
+
+    async Task MostrarNoAgregadoExitosamente()
+    {
+        await JSRuntime.InvokeVoidAsync("alert", $"Corrija los datos faltantes");
+    }}
